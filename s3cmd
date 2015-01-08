@@ -1325,6 +1325,11 @@ def cmd_sync_local2remote(args):
                         speed_fmt[0], speed_fmt[1], seq_label))
                 total_size += response["size"]
                 uploaded_objects_list.append(uri.object())
+                if cfg.delete_source_after:
+                    try:
+                        os.remove(src)
+                    except OSError, e:
+                        output("Error deleting %s: " % (src, e.strerror))
             return seq, total_size
 
         remote_list, dst_exclude_list = fetch_remote_list(destination_base, recursive = True, require_attribs = True)
@@ -2157,6 +2162,7 @@ def main():
     optparser.add_option(      "--delete-removed", dest="delete_removed", action="store_true", help="Delete remote objects with no corresponding local file [sync]")
     optparser.add_option(      "--no-delete-removed", dest="delete_removed", action="store_false", help="Don't delete remote objects.")
     optparser.add_option(      "--delete-after", dest="delete_after", action="store_true", help="Perform deletes after new uploads [sync]")
+    optparser.add_option(      "--delete-source-after", dest="delete_source_after", action="store_true", help="Delete source files after copy (but keep directories) [sync]")
     optparser.add_option(      "--delay-updates", dest="delay_updates", action="store_true", help="Put all updated files into place at end [sync]")
     optparser.add_option(      "--max-delete", dest="max_delete", action="store", help="Do not delete more than NUM files. [del] and [sync]", metavar="NUM")
     optparser.add_option(      "--add-destination", dest="additional_destinations", action="append", help="Additional destination for parallel uploads, in addition to last arg.  May be repeated.")

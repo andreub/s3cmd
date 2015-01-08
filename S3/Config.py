@@ -69,6 +69,7 @@ class Config(object):
     ]
     delete_removed = False
     delete_after = False
+    delete_source_after = False
     delete_after_fetch = False
     max_delete = -1
     _doc['delete_removed'] = "[sync] Remove remote S3 objects when local file has been deleted"
